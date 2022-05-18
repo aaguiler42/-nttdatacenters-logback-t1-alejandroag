@@ -18,6 +18,8 @@ import java.util.Scanner;
  * @version 0.1-SNAPSHOT
  */
 public class App {
+
+	/** LOGGER */
 	private static final Logger Log = LoggerFactory.getLogger(App.class);
 
 	/**
@@ -26,14 +28,16 @@ public class App {
 	 * @return the height of the pyramid
 	 */
 	private static int readParameters() {
+
 		Log.info("Leyendo parametros");
+
 		Scanner s = new Scanner(System.in);
 
 		System.out.print("Introduzca la altura de la piramide: ");
 		int h = s.nextInt();
 
 		s.close();
-		
+
 		Log.info("Parametros leidos");
 
 		return h;
@@ -46,7 +50,9 @@ public class App {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void generatePdfPiramid(int h) throws IOException {
+
 		Log.info("Generando PDF");
+
 		PDDocument doc = new PDDocument();
 		PDPage firstPage = new PDPage();
 
@@ -56,12 +62,14 @@ public class App {
 
 		doc.addPage(firstPage);
 		PDPageContentStream contentStream = new PDPageContentStream(doc, firstPage);
+
 		Log.info("Primera página aniadida");
 
 		contentStream.beginText();
 		contentStream.setFont(PDType1Font.TIMES_BOLD_ITALIC, 14);
 		contentStream.setLeading(14.5f);
 		contentStream.newLineAtOffset(25, 700);
+
 		Log.info("Valores por defecto establecidos");
 
 		for (int i = 1; i <= h; i++) {
@@ -69,17 +77,25 @@ public class App {
 			text = "";
 
 			for (int j = 1; j <= spaces; j++) {
+
+				Log.debug("Pintando espacio");
 				text = text + " ";
+
 			}
 
 			for (int k = 1; k <= print; k++) {
+
+				Log.debug("Pintando relleno");
 				text = text + "*";
+
 			}
+
 			print++;
 			spaces--;
 			contentStream.showText(text);
 			contentStream.newLine();
-			Log.info("Línea {} pintada", i);
+
+			Log.debug("Línea {} pintada", i);
 		}
 
 		contentStream.endText();
@@ -87,7 +103,9 @@ public class App {
 
 		doc.save("pdfs/newPDF");
 		Log.info("PDF guardado");
+
 		doc.close();
+
 		Log.info("Documento cerrado");
 		Log.info("PDF generado");
 	}
@@ -96,9 +114,13 @@ public class App {
 	 * @param args the command line arguments (not used)
 	 */
 	public static void main(String[] args) throws IOException {
+
 		Log.info("Inicio de programa");
+
 		int h = readParameters();
 		generatePdfPiramid(h);
+
 		Log.info("Programa finalizado");
+
 	}
 }
